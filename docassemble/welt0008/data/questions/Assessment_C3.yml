@@ -1,0 +1,114 @@
+---
+features:
+  css: C4_01_lnf_with_comments.css
+  debug: True
+  hide standard menu: False
+--- 
+variable name: JIWperson_info
+use objects: True 
+data:
+  - First Name: Julia
+    Last Name: Weltner
+    Age: 22
+    Hobbies: Netball
+    Likes Pets?: True
+  - First Name: Billy
+    Last Name: Weltner
+    Age: 23
+    Hobbies: Playstation
+    Likes Pets?: True
+  - First Name: Phillipa
+    Last Name: Weltner
+    Age: 45
+    Hobbies: Cooking
+    Likes Pets?: True
+  - First Name: Greg
+    Last Name: Weltner
+    Age: 55
+    Hobbies: Footy
+    Likes Pets?: True
+  - First Name: Jessica
+    Last Name: Lynch 
+    Age: 27
+    Hobbies: Reality TV
+    Likes Pets?: True 
+  - First Name: Alfie
+    Last Name: Weltner
+    Age: 4
+    Hobbies: Licking his ass and feet
+    Likes Pets?: True
+  - First Name: Jacoba
+    Last Name: Weltner
+    Age: 15
+    Hobbies: Barking
+    Likes Pets?: False
+---
+mandatory: True
+code: |
+  for JIWitem in JIWperson_info:
+  
+    JIWitem ['JIWchoices'] = []
+    for JIWkey in JIWitem.keys():
+      if JIWkey != 'JIWchoices':
+        JIWitem['JIWchoices'].append('**{}:** {}'.format(JIWkey, JIWitem[JIWkey]))
+---
+mandatory: True
+question: Family Information Question Table
+subquestion: |
+  #### Here is the Family Information Gathered
+  
+  ${ JIWquestion_table1 }
+
+buttons:
+  - Continue: continue
+  - Restart: restart
+---
+table: JIWquestion_table1
+rows: JIWperson_info
+columns:
+  - First Name: |
+      row_item['First Name']
+  - Last Name: |
+      row_item['Last Name']
+  - Age: |
+      row_item['Age']
+  - Hobbies: | 
+      row_item['Hobbies']
+  - Likes Pets: |
+      row_item['Likes Pets?']
+---
+mandatory: True
+question: Family Information Question Table Correct Answers
+subquestion: |
+  #### Here is the Family Information Gathered
+  
+  ${ JIWquestion_table }
+
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+table: JIWquestion_table
+rows: JIWperson_info
+columns:
+  - First Name: |
+      row_item['First Name']
+  - Last Name: |
+      row_item['Last Name']
+  - Age: |
+      row_item['Age']
+  - Hobbies: | 
+      row_item['Hobbies']
+  - Likes Pets: |
+      row_item['Likes Pets?']
+  - Correct Data: |
+      row_item['JIWcorrectdata'].true_values()
+---
+question: |
+  #Is the information below correct for **${ JIWperson_info[i]['First Name'] }?**
+  *Please select the correct checkboxes.*
+fields:
+  - no label: JIWperson_info[i]['JIWcorrectdata']
+    datatype: checkboxes
+    code: JIWperson_info[i]['JIWchoices']
+---
