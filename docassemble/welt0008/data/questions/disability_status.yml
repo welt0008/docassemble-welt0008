@@ -1,0 +1,51 @@
+---
+Mandatory: true
+question: Disability status 
+fields:
+  - Please select which of the following applies to you: JIWdisabilitystatus
+    datatype: radio
+    choices:
+    - I have a disability
+    - I have had a disability in the past
+    - I may develop a disability in the future 
+    - People think I have a disability 
+    - None of the above
+---
+mandatory: true
+code: |
+  if JIWdisabilitystatus == 'I have a disability' or 'I have had a disability in the past':
+    endpoint ['event_1']
+  elif JIWdisabilitystatus == 'I may develop a disability in the future' or 'People think I have a disability':
+    endpoint ['event_2']
+  elif JIWdisabilitystatus == 'None of the above':
+    endpoint ['event_3']
+---
+event: endpoint ['event_1']
+question: What is/ was the nature of your disability?
+fields:
+  - Please select which of the following disabilities applies to you: JIWdisability
+    datatype: radio
+    choices:
+    - Physical
+    - Sensory
+    - Psychiatric
+    - Neurological
+    - Cognitive
+    - Intellectual
+    - Other
+  - Other: other_disability
+    show if:
+      variable: JIWdisability
+      is: Other
+---
+event: endpoint ['event_2']
+question: |
+  Please explain
+fields: 
+  - JIWexplanation
+    input type: area
+---
+event: endpoint ['event_3']
+include:
+  - noneoftheabove.yml
+---
