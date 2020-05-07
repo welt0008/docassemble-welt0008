@@ -1,0 +1,98 @@
+---
+Mandatory: true
+continue button field: target_variable
+Question: |
+  We will now ask some personal information from you 
+subquestion: |
+  When you are ready to begin, press Continue.
+---
+Mandatory: true
+Question: Are you filling this out for yourself or for someone else?
+fields:
+  - Who is this form for?: JIWperson_filling_in_form
+    datatype: radio
+    choices:
+    - Myself
+    - Someone else
+---
+Mandatory: true
+question: What is your name?
+fields:
+  - First Name: JIWfirstname
+  - Last Name: JIWlastname
+--- 
+Mandatory: true
+question: What is your date of birth?
+fields:
+  - Birthdate: target_variable
+    datatype: date
+---
+Mandatory: true
+question: Contact details
+fields: 
+  - label: E-mail Address
+    field: JIWemail
+    datatype: email 
+  - label: Phone Number
+    field: JIWmobile 
+    datatype: integer
+  - label: Address
+    field: JIWaddress
+    datatype: area
+    hint: e.g., 123 First Street, Adelaide, South Australia, 5000
+    required: false
+  - label: Preferred method of contact
+    field: JIWcontact
+    datatype: radio
+    choices:
+    - E-mail
+    - Mobile
+---
+show if: 
+  JIWperson_filling_in_form == 'Someone else':
+question: |
+  What is your relation to the person who you are filling the form out on behalf of?
+fields:
+  - Please select which of the following best applies: JIWrelation
+    datatype: radio
+    choices:
+    - Parent/ guardian
+    - Carer
+    - Partner
+    - Friend
+    - Other
+  - Other: other_relation
+    show if:
+      variable: JIWrelation
+      is: Other
+---
+show if: 
+  JIWperson_filling_in_form == 'Someone else':
+question: Do you yourself have a disability?
+yesno: personal_disability
+---
+show if:
+  personal_disability == True:
+question: What is the nature of your disability?
+fields:
+  - Please select which of the following disabilities applies to you: JIWdisability
+    datatype: radio
+    choices:
+    - Physical
+    - Sensory
+    - Psychiatric
+    - Neurological
+    - Cognitive
+    - Intellectual
+    - Other
+  - Other: other_disability
+    show if:
+      variable: JIWdisability
+      is: Other
+---
+show if: 
+  JIWperson_filling_in_form == 'Someone else'
+continue button field: target_variable
+Question: |
+  NOTE: for the remainder of the form, please answer questions as if it were the person who the form is for filling it out. All references to "you" refer to the person who this form is being filled out on behalf of. 
+---

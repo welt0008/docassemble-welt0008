@@ -1,0 +1,59 @@
+---
+Mandatory: true
+Question: |
+  Do you feel that you have been treated differently on the basis of a relationship or association with a person with a disability?
+yesno: relationship_with
+---
+code: |
+  if relationship_with == 'Yes':
+    endpoint['eligible']
+  else:
+    endpoint['ineligible']
+  final_screen
+---
+event: endpoint['ineligible']
+question: |
+  ### This form is for ***disability discrimination***. 
+  
+  ######If you still believe this form is applicable to you, please press 'continue'.
+  
+  Pressing 'exit' will direct you back to the Equality Lawyers Website, and you will lose all progress so far.
+field: wishes_to_continue
+action buttons:
+  - label: Exit
+    action: https://www.equalitylawyers.com.au/
+    color: warning
+    icon: sign-out-alt
+---
+#needs to go to here if they press continue to the Q above but i dont know how to do that
+question: |
+  Briefly describe why you feel this form is applicable to you
+fields:
+  - This form is applicable to me because...: JIWapplicable
+    input type: area
+---
+event: endpoint['eligible']
+question: |
+  What is the relationship or association you have with the person with a disability?
+fields:
+  - Please select which of the following disabilities applies to you: JIWrelo_or_association
+    datatype: radio
+    choices:
+    - Friend
+    - Partner 
+    - Family member 
+    - Other
+  - Other: other_disability
+    show if:
+      variable: JIWrelo_or_association
+      is: Other
+---
+event: final_screen
+question: We now have all of the personal information we need.
+subquestion: |
+  We will now ask some questions about the incident of potential disability discrimination. 
+buttons: 
+  - Continue: continue
+  - Exit: exit
+    URL: https://www.equalitylawyers.com.au/
+---
